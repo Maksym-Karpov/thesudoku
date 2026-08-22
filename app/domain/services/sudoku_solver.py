@@ -6,6 +6,16 @@ from app.domain.value_objects.cell_position import CellPosition
 from app.domain.value_objects.cell_value import CellValue
 
 
+class _AttemptsBudget:
+    def __init__(self, remaining: int) -> None:
+        self._remaining = remaining
+
+    def consume(self) -> None:
+        self._remaining -= 1
+        if self._remaining < 0:
+            raise AttemptsBudgetExceeded("Exceeded attempts budget while counting solutions")
+
+
 class SudokuSolver:
     def solve(self, board: Board, randomize: bool = False) -> Board | None:
         """
@@ -51,14 +61,12 @@ class SudokuSolver:
         """
         if not board.is_valid():
             return 0
-        remaining_attempts = [attempts_budget] if attempts_budget is not None else None
-        return self._count_solutions(board=board, limit=limit, remaining_attempts=remaining_attempts)
+        budget = _AttemptsBudget(remaining=attempts_budget) if attempts_budget is not None else None
+        return self._count_solutions(board=board, limit=limit, budget=budget)
 
-    def _count_solutions(self, board: Board, limit: int, remaining_attempts: list[int] | None) -> int:
-        if remaining_attempts is not None:
-            remaining_attempts[0] -= 1
-            if remaining_attempts[0] < 0:
-                raise AttemptsBudgetExceeded("Exceeded attempts budget while counting solutions")
+    def _count_solutions(self, board: Board, limit: int, budget: _AttemptsBudget | None) -> int:
+        if budget is not None:
+            budget.consume()
 
         position, candidates = self._get_mrv_cell(board=board)
         if (position, candidates) == (None, None):
@@ -67,7 +75,7 @@ class SudokuSolver:
         found = 0
         for candidate in candidates:
             board.force_set(position=position, value=candidate)
-            found += self._count_solutions(board=board, limit=limit - found, remaining_attempts=remaining_attempts)
+            found += self._count_solutions(board=board, limit=limit - found, budget=budget)
             board.force_set(position=position, value=None)
             if found >= limit:
                 return found

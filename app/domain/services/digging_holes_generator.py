@@ -8,7 +8,7 @@ from app.domain.value_objects.cell_position import CellPosition
 from app.domain.value_objects.game_difficulty import GameDifficulty
 
 
-_UNIQUENESS_CHECK_ATTEMPTS_BUDGET = 1000
+_UNIQUENESS_CHECK_ATTEMPTS_BUDGET = 64
 
 
 class DiggingHolesGenerator:
@@ -38,15 +38,6 @@ class DiggingHolesGenerator:
         self._mark_cells_with_value_as_fixed(puzzle=puzzle)
         return puzzle
 
-    @staticmethod
-    def _mark_cells_with_value_as_fixed(puzzle: Board) -> None:
-        """
-        Mark every cell that still has value as fixed
-        """
-        for row in puzzle.get_rows():
-            for cell in row:
-                puzzle.force_set(position=cell.position, value=cell.value, is_fixed=cell.value is not None)
-
     def _dig_hole(self, puzzle: Board, position: CellPosition) -> bool:
         """
         Remove the value at the given position if the puzzle still has a unique solution
@@ -69,3 +60,12 @@ class DiggingHolesGenerator:
         except AttemptsBudgetExceeded:
             return False
         return solution_count == 1
+
+    @staticmethod
+    def _mark_cells_with_value_as_fixed(puzzle: Board) -> None:
+        """
+        Mark every cell that still has value as fixed
+        """
+        for row in puzzle.get_rows():
+            for cell in row:
+                puzzle.force_set(position=cell.position, value=cell.value, is_fixed=cell.value is not None)
