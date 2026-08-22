@@ -17,8 +17,6 @@ from app.infrastructure.repositories.game_repository import GameRepository
 
 @dataclass(frozen=True, slots=True)
 class Dependencies:
-    """Bundle of application-layer use cases handed to a presentation adapter."""
-
     new_game_use_case: NewGameUseCase
     get_game_state_use_case: GetGameStateUseCase
     set_cell_value_use_case: SetCellValueUseCase
@@ -27,7 +25,6 @@ class Dependencies:
 
 
 def dependencies_facade() -> Dependencies:
-    """Build every use case wired to one shared in-memory repository."""
     repository = GameRepository()
     generator = PuzzleGenerator()
 
