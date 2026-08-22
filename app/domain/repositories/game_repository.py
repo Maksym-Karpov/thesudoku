@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 from app.domain.entities.game import Game
-from app.domain.exceptions import GameNotFoundError
 
 
 class BaseRepository(ABC):
@@ -13,8 +12,6 @@ class BaseRepository(ABC):
     def get(self, game_id: str) -> Game | None:
         ...
 
+    @abstractmethod
     def get_or_raise(self, game_id: str) -> Game:
-        game = self.get(game_id=game_id)
-        if game is None:
-            raise GameNotFoundError(f"No game found with id {game_id}")
-        return game
+        ...
