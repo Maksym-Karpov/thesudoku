@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Sudoku — {{ state.difficulty.value }}{% endblock %}
+{% block content %}
+  <p>
+    Difficulty: <strong>{{ state.difficulty.value }}</strong> &middot;
+    Status: <span class="status {{ state.status.value }}">{{ state.status.value }}</span>
+  </p>
+
+  {% if state.status.value == "WON" %}
+    <p class="status WON">🎉 Solved! Congratulations! 🎉</p>
+  {% endif %}
+
+  {% if errors %}
+    <ul class="errors">
+      {% for error in errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" action="/game/{{ state.game_id }}/update">
+    <table class="board">
+      {% for row in range(9) %}
+      <tr>
+        {% for col in range(9) %}
+        <td>
+          <input
+            type="text"
+            inputmode="numeric"
+            maxlength="1"
+            name="cell_{{ row }}_{{ col }}"
+            value="{{ state.grid[row][col] if state.grid[row][col] is not none else '' }}"
+            {% if state.fixed_mask[row][col] %}readonly{% endif %}
+          >
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+    <button type="submit">Save moves</button>
+  </form>
+
+  <div class="actions">
+    <form method="post" action="/game/{{ state.game_id }}/hint" class="hint-form">
+      <label>Hint: row</label>
+      <input type="number" name="row" min="1" max="9" required>
+      <label>column</label>
+      <input type="number" name="col" min="1" max="9" required>
+      <button type="submit">Reveal</button>
+    </form>
+
+    <form method="post" action="/game/{{ state.game_id }}/restart">
+      <button type="submit">Reset moves</button>
+    </form>
+
+    <form method="get" action="/">
+      <button type="submit">New game</button>
+    </form>
+  </div>
+{% endblock %}

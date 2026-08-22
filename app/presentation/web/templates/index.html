@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Sudoku — new game{% endblock %}
+{% block content %}
+  <p>Choose a difficulty and start a new game.</p>
+  <form method="post" action="/new">
+    <select name="difficulty">
+      <option value="EASY">Easy</option>
+      <option value="MEDIUM" selected>Medium</option>
+      <option value="HARD">Hard</option>
+    </select>
+    <button type="submit">New game</button>
+  </form>
+{% endblock %}
