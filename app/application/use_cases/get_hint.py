@@ -1,7 +1,7 @@
 from app.application.dto.game_state_dto import GameStateDTO
 from app.application.exceptions import ApplicationError
 from app.domain.exceptions import FixedCellError
-from app.domain.repositories.game_repository import BaseRepository
+from app.infrastructure.repositories.base_repository import BaseRepository
 from app.domain.value_objects.cell_position import CellPosition
 
 

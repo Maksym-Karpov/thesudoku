@@ -1,6 +1,6 @@
 from app.domain.entities.game import Game
 from app.domain.exceptions import GameNotFoundError
-from app.domain.repositories.game_repository import BaseRepository
+from app.infrastructure.repositories.base_repository import BaseRepository
 
 
 class GameRepository(BaseRepository):

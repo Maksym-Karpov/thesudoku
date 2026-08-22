@@ -1,5 +1,5 @@
 from app.application.dto.game_state_dto import GameStateDTO
-from app.domain.repositories.game_repository import BaseRepository
+from app.infrastructure.repositories.base_repository import BaseRepository
 from app.domain.entities.game import Game
 from app.domain.services.puzzle_generator import PuzzleGenerator
 from app.domain.value_objects.game_difficulty import GameDifficulty

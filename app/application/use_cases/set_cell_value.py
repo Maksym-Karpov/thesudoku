@@ -1,5 +1,5 @@
 from app.application.dto.game_state_dto import GameStateDTO
-from app.domain.repositories.game_repository import BaseRepository
+from app.infrastructure.repositories.base_repository import BaseRepository
 from app.domain.value_objects.cell_position import CellPosition
 from app.domain.value_objects.cell_value import CellValue
 

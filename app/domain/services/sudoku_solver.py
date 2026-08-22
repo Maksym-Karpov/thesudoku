@@ -24,10 +24,9 @@ class SudokuSolver:
         """
         Sets recursively random applicable value for best cell candidate
         """
-        choice = self._get_mrv_cell(board=board)
-        if choice is None:
+        position, candidates = self._get_mrv_cell(board=board)
+        if position is None:
             return True
-        position, candidates = choice
         if not candidates:
             return False
 
